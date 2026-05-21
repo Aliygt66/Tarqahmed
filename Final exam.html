@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة مراجعة | دوائر موائمة الحاسوب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ════════════════════════════════════════
+   DESIGN SYSTEM — DARK TECH ACADEMIC
+   ════════════════════════════════════════ */
+:root {
+  --c-bg:        #080c14;
+  --c-surface:   #0d1321;
+  --c-surface2:  #111827;
+  --c-surface3:  #1a2236;
+  --c-border:    #1e2d45;
+  --c-border2:   #243352;
+  --c-blue:      #3b82f6;
+  --c-blue-dim:  #1d4ed8;
+  --c-blue-glow: rgba(59,130,246,.18);
+  --c-teal:      #14b8a6;
+  --c-teal-glow: rgba(20,184,166,.15);
+  --c-green:     #10b981;
+  --c-green-glow:rgba(16,185,129,.15);
+  --c-amber:     #f59e0b;
+  --c-amber-glow:rgba(245,158,11,.15);
+  --c-red:       #ef4444;
+  --c-red-glow:  rgba(239,68,68,.15);
+  --c-purple:    #8b5cf6;
+  --c-text:      #e2e8f0;
+  --c-text-dim:  #94a3b8;
+  --c-text-muted:#475569;
+  --radius-sm:   6px;
+  --radius:      12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,.5);
+  --font-ar: 'Tajawal', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition: all .25s cubic-bezier(.4,0,.2,1);
+
+  /* متغيرات بديلة لضمان توافق رسومات (SVGs) من البيانات الأصلية مع الثيم الجديد */
+  --bg-body: var(--c-bg);
+  --bg-card: var(--c-surface);
+  --bg-hover: var(--c-surface3);
+  --primary: var(--c-blue);
+  --secondary: var(--c-teal);
+  --success: var(--c-green);
+  --warning: var(--c-amber);
+  --text-main: var(--c-text);
+  --text-dim: var(--c-text-dim);
+  --danger: var(--c-red);
+  --card-border: var(--c-border);
+}
+
+body.light {
+  --c-bg:        #f0f4f8;
+  --c-surface:   #ffffff;
+  --c-surface2:  #f8fafc;
+  --c-surface3:  #f1f5f9;
+  --c-border:    #e2e8f0;
+  --c-border2:   #cbd5e1;
+  --c-blue:      #2563eb;
+  --c-blue-glow: rgba(37,99,235,.1);
+  --c-teal:      #0d9488;
+  --c-teal-glow: rgba(13,148,136,.1);
+  --c-green:     #059669;
+  --c-green-glow:rgba(5,150,105,.1);
+  --c-amber:     #d97706;
+  --c-amber-glow:rgba(217,119,6,.1);
+  --c-red:       #dc2626;
+  --c-red-glow:  rgba(220,38,38,.1);
+  --c-text:      #1e293b;
+  --c-text-dim:  #475569;
+  --c-text-muted:#94a3b8;
+  --shadow-card: 0 4px 24px rgba(0,0,0,.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ar); background: var(--c-bg); color: var(--c-text);
+  min-height: 100vh; line-height: 1.7; font-size: 15px;
+  transition: background .3s, color .3s; user-select: none;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .4;
+}
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(var(--c-border) 1px, transparent 1px), linear-gradient(90deg, var(--c-border) 1px, transparent 1px);
+  background-size: 40px 40px; opacity: .25;
+}
+body.light::after { opacity: .15; }
+
+/* ════════════════ HEADER ════════════════ */
+.site-header {
+  position: relative; z-index: 10;
+  background: linear-gradient(180deg, var(--c-surface2) 0%, var(--c-surface) 100%);
+  border-bottom: 1px solid var(--c-border2); padding: 0 20px;
+}
+.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 12px; }
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.brand-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--c-blue), var(--c-teal)); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 0 20px var(--c-blue-glow); flex-shrink: 0; }
+.brand-text { display: flex; flex-direction: column; }
+.brand-title { font-size: 1.1rem; font-weight: 800; color: var(--c-text); line-height: 1.2; }
+.brand-sub   { font-size: .78rem; color: var(--c-text-dim); font-weight: 400; margin-top: 2px; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn { width: 38px; height: 38px; border: 1px solid var(--c-border2); background: var(--c-surface3); color: var(--c-text-dim); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; transition: var(--transition); }
+.icon-btn:hover { border-color: var(--c-blue); color: var(--c-blue); background: var(--c-blue-glow); }
+
+/* ════════════════ LAYOUT ════════════════ */
+.main-wrap { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ════════════════ STATS BAR ════════════════ */
+.stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; animation: fadeUp .5s ease both; }
+.stat-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; transition: var(--transition); }
+.stat-card:hover { border-color: var(--c-border2); transform: translateY(-2px); }
+.stat-num { font-size: 1.6rem; font-weight: 900; line-height: 1; font-family: var(--font-mono); }
+.stat-lbl { font-size: .72rem; color: var(--c-text-muted); font-weight: 500; }
+.stat-card.blue  .stat-num { color: var(--c-blue); }
+.stat-card.teal  .stat-num { color: var(--c-teal); }
+.stat-card.amber .stat-num { color: var(--c-amber); }
+
+/* ════════════════ TELEGRAM ════════════════ */
+.tg-banner { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #1a7ab5 0%, #0f5a87 100%); border-radius: var(--radius-lg); padding: 16px 20px; text-decoration: none; margin-bottom: 20px; border: 1px solid #1e6fa5; box-shadow: 0 4px 20px rgba(0,100,180,.25); gap: 12px; animation: fadeUp .5s .1s ease both; transition: var(--transition); }
+.tg-banner:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,100,180,.35); }
+.tg-left  { display: flex; align-items: center; gap: 12px; }
+.tg-icon  { font-size: 1.8rem; color: #fff; }
+.tg-title { font-size: .95rem; font-weight: 800; color: #fff; }
+.tg-sub   { font-size: .78rem; color: rgba(255,255,255,.75); }
+.tg-arrow { color: rgba(255,255,255,.6); font-size: .85rem; }
+
+/* ════════════════ SECTION CARDS ════════════════ */
+.section-label { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-text-muted); margin-bottom: 10px; padding: 0 4px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--c-border); }
+.module-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 12px; transition: var(--transition); animation: fadeUp .5s ease both; position: relative; overflow: hidden; }
+.module-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.module-card.blue::before  { background: var(--c-blue); }
+.module-card.teal::before  { background: var(--c-teal); }
+.module-card.amber::before { background: var(--c-amber); }
+.module-card.default::before { background: var(--c-border2); }
+.module-card:hover { border-color: var(--c-border2); box-shadow: var(--shadow-card); transform: translateY(-1px); }
+.module-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.module-icon { width: 42px; height: 42px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.module-icon.blue  { background: var(--c-blue-glow);  color: var(--c-blue); border: 1px solid rgba(59,130,246,.25); }
+.module-icon.teal  { background: var(--c-teal-glow);  color: var(--c-teal); border: 1px solid rgba(20,184,166,.25); }
+.module-icon.amber { background: var(--c-amber-glow); color: var(--c-amber); border: 1px solid rgba(245,158,11,.25); }
+.module-icon.gray  { background: var(--c-surface3); color: var(--c-text-dim); border: 1px solid var(--c-border); }
+.module-info { flex: 1; }
+.module-title { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+.module-desc  { font-size: .8rem; color: var(--c-text-dim); }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: .7rem; font-weight: 700; font-family: var(--font-mono); background: var(--c-surface3); border: 1px solid var(--c-border); color: var(--c-text-dim); }
+
+/* ── BUTTON GRID ── */
+.btn-grid { display: grid; gap: 8px; }
+.btn-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.btn-grid.cols-1 { grid-template-columns: 1fr; }
+.action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-ar); font-size: .88rem; font-weight: 700; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+.action-btn.primary { background: var(--c-blue); color: #fff; border-color: var(--c-blue-dim); box-shadow: 0 2px 12px var(--c-blue-glow); }
+.action-btn.primary:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 6px 20px var(--c-blue-glow); }
+.action-btn.outline { background: var(--c-surface3); color: var(--c-text); border-color: var(--c-border2); }
+.action-btn.outline:hover { border-color: var(--c-blue); color: var(--c-blue); background: var(--c-blue-glow); }
+.action-btn.teal { background: var(--c-teal); color: #fff; border-color: var(--c-teal); box-shadow: 0 2px 12px var(--c-teal-glow); }
+.action-btn.teal:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.action-btn.amber { background: var(--c-amber); color: #0a0a0a; border-color: var(--c-amber); box-shadow: 0 2px 12px var(--c-amber-glow); }
+.action-btn.amber:hover { filter: brightness(1.08); transform: translateY(-2px); }
+
+/* ── INPUTS ── */
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.input-row.single { grid-template-columns: 1fr; }
+.field-input { width: 100%; padding: 10px 14px; background: var(--c-surface3); border: 1px solid var(--c-border2); border-radius: var(--radius); color: var(--c-text); font-family: var(--font-ar); font-size: .88rem; transition: var(--transition); text-align: center; }
+.field-input::placeholder { color: var(--c-text-muted); }
+.field-input:focus { outline: none; border-color: var(--c-blue); box-shadow: 0 0 0 3px var(--c-blue-glow); }
+
+/* ════════════════ QUIZ VIEW ════════════════ */
+#quiz-view { display: none; }
+.quiz-topbar { position: sticky; top: 8px; z-index: 100; background: var(--c-surface); border: 1px solid var(--c-border2); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; margin-bottom: 20px; gap: 12px; backdrop-filter: blur(10px); }
+.topbar-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--c-border2); border-radius: var(--radius); font-family: var(--font-ar); font-size: .85rem; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.topbar-btn.back { background: var(--c-surface3); color: var(--c-text); }
+.topbar-btn.back:hover { border-color: var(--c-blue); color: var(--c-blue); }
+.topbar-btn.finish { background: var(--c-red); color: #fff; border-color: var(--c-red); }
+.topbar-btn.finish:hover { filter: brightness(1.1); }
+.score-display { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: .95rem; font-weight: 700; }
+.score-pill { display: flex; align-items: center; gap: 6px; background: var(--c-surface3); border: 1px solid var(--c-border2); border-radius: 20px; padding: 4px 14px; }
+.score-correct { color: var(--c-green); font-size: 1.05rem; }
+.score-sep     { color: var(--c-text-muted); }
+.score-total   { color: var(--c-text-dim); }
+.progress-track { height: 3px; background: var(--c-surface3); border-radius: 2px; overflow: hidden; flex: 1; min-width: 60px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--c-blue), var(--c-teal)); border-radius: 2px; transition: width .4s ease; }
+
+/* ════════════════ QUESTION CARD ════════════════ */
+.q-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-card); animation: fadeUp .4s ease both; transition: border-color .25s; }
+.q-card:hover { border-color: var(--c-border2); }
+.q-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--c-border); }
+.q-num { display: inline-flex; align-items: center; gap: 6px; background: var(--c-blue-glow); border: 1px solid rgba(59,130,246,.3); color: var(--c-blue); padding: 3px 10px; border-radius: 20px; font-size: .78rem; font-weight: 700; font-family: var(--font-mono); }
+.q-group-tag { font-size: .72rem; color: var(--c-text-muted); font-weight: 600; letter-spacing: .04em; }
+.q-body { padding: 16px; border-radius: var(--radius); background: var(--c-surface2); border: 1px solid var(--c-border); margin-bottom: 14px; font-size: 1rem; font-weight: 600; direction: ltr; text-align: left; color: var(--c-text); line-height: 1.6; transition: var(--transition); }
+.q-body.ar-mode { direction: rtl; text-align: right; background: linear-gradient(135deg, var(--c-amber-glow), transparent); border-color: rgba(245,158,11,.3); color: var(--c-amber); }
+.q-img-wrap { margin-bottom: 14px; padding: 12px; background: var(--c-surface2); border: 1px solid var(--c-border); border-radius: var(--radius); overflow-x: auto; text-align: center; }
+.q-img-wrap svg { width: 100%; max-width: 600px; height: auto; border-radius: 4px; }
+.options { list-style: none; display: flex; flex-direction: column; gap: 8px; direction: ltr; margin-bottom: 14px; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--c-surface2); border: 1px solid var(--c-border); border-radius: var(--radius); cursor: pointer; font-size: .92rem; font-weight: 500; color: var(--c-text); text-align: left; transition: var(--transition); position: relative; overflow: hidden; }
+.opt::before { content: ''; position: absolute; inset: 0; background: var(--c-blue-glow); opacity: 0; transition: opacity .2s; }
+.opt:hover:not(.locked) { border-color: var(--c-blue); color: var(--c-blue); }
+.opt:hover:not(.locked)::before { opacity: 1; }
+.opt-letter { width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .78rem; font-weight: 700; background: var(--c-surface3); border: 1px solid var(--c-border2); color: var(--c-text-dim); transition: var(--transition); }
+.opt:hover:not(.locked) .opt-letter { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.opt.correct { background: var(--c-green-glow); border-color: var(--c-green); color: var(--c-green); }
+.opt.correct .opt-letter { background: var(--c-green); color: #fff; border-color: var(--c-green); }
+.opt.wrong { background: var(--c-red-glow); border-color: var(--c-red); color: var(--c-red); }
+.opt.wrong .opt-letter { background: var(--c-red); color: #fff; border-color: var(--c-red); }
+.opt.locked { cursor: not-allowed; }
+.opt.locked:not(.correct):not(.wrong) { opacity: .55; }
+.q-footer { display: flex; align-items: center; justify-content: flex-start; border-top: 1px dashed var(--c-border); padding-top: 12px; }
+.translate-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--c-amber-glow); border: 1px solid rgba(245,158,11,.3); color: var(--c-amber); border-radius: var(--radius); font-family: var(--font-ar); font-size: .82rem; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.translate-btn:hover { background: var(--c-amber); color: #0a0a0a; border-color: var(--c-amber); transform: translateY(-1px); }
+
+/* ════════════════ RESULT MODAL ════════════════ */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn .3s ease; backdrop-filter: blur(4px); }
+.modal-box { background: var(--c-surface); border: 1px solid var(--c-border2); border-radius: var(--radius-xl); padding: 32px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,.6); animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+.result-emoji { font-size: 4rem; margin-bottom: 16px; display: block; }
+.result-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; }
+.result-sub   { font-size: .9rem; color: var(--c-text-dim); margin-bottom: 24px; }
+.result-ring { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; position: relative; }
+.result-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-bg  { stroke: var(--c-surface3); stroke-width: 8; fill: none; }
+.ring-val { stroke-width: 8; fill: none; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.result-pct { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 900; position: relative; z-index: 1; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.rs-item { background: var(--c-surface2); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 10px 8px; text-align: center; }
+.rs-val { font-size: 1.3rem; font-weight: 900; font-family: var(--font-mono); }
+.rs-lbl { font-size: .7rem; color: var(--c-text-muted); margin-top: 2px; }
+.modal-btns { display: flex; gap: 10px; }
+.modal-btn { flex: 1; padding: 12px; border: 1px solid var(--c-border2); border-radius: var(--radius); font-family: var(--font-ar); font-size: .9rem; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.modal-btn.primary { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.modal-btn.primary:hover { filter: brightness(1.1); }
+.modal-btn.secondary { background: var(--c-surface3); color: var(--c-text); }
+.modal-btn.secondary:hover { border-color: var(--c-blue); color: var(--c-blue); }
+
+/* ════════════════ FOOTER ════════════════ */
+.site-footer { position: relative; z-index: 1; text-align: center; padding: 24px 16px 40px; border-top: 1px solid var(--c-border); color: var(--c-text-muted); font-size: .78rem; margin-top: 20px; }
+.footer-names { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.footer-name { display: inline-flex; align-items: center; gap: 5px; background: var(--c-surface); border: 1px solid var(--c-border); padding: 5px 12px; border-radius: 20px; font-weight: 700; color: var(--c-text); font-size: .8rem; }
+pre { background: #050a0f !important; color: #14b8a6 !important; font-family: var(--font-mono) !important; font-size: .8rem !important; padding: 14px 16px; border-radius: var(--radius); overflow-x: auto; border: 1px solid #1a2a3a; margin-top: 10px; margin-bottom: 4px; white-space: pre; text-align: left !important; }
+code { font-family: var(--font-mono); font-size: .85em; color: var(--c-teal); }
+.divider { height: 1px; background: var(--c-border); margin: 6px 0 16px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes popIn  { from { opacity:0; transform:scale(.85); } to { opacity:1; transform:scale(1); } }
+
+@media (max-width: 540px) {
+  .header-inner { padding: 12px 0; }
+  .brand-title { font-size: .95rem; }
+  .brand-sub { display: none; }
+  .stats-bar { grid-template-columns: repeat(3,1fr); gap: 6px; }
+  .stat-num { font-size: 1.3rem; }
+  .btn-grid.cols-2 { grid-template-columns: 1fr; }
+  .modal-box { padding: 22px; }
+  .topbar-btn span.label { display: none; }
+  .progress-track { min-width: 40px; }
+}
+
+.quiz-count-header { text-align: center; margin-bottom: 20px; color: var(--c-text-dim); font-size: .85rem; font-weight: 600; }
+.quiz-count-header strong { color: var(--c-blue); font-family: var(--font-mono); }
+.module-card:nth-child(1) { animation-delay: .05s; }
+.module-card:nth-child(2) { animation-delay: .1s; }
+.module-card:nth-child(3) { animation-delay: .15s; }
+.module-card:nth-child(4) { animation-delay: .2s; }
+.module-card:nth-child(5) { animation-delay: .25s; }
+
+/* جداول المراجعة */
+.summary-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; font-size: 0.95rem; }
+.summary-table th, .summary-table td { border: 1px solid var(--c-border); padding: 10px; text-align: left; }
+.summary-table th { background-color: var(--c-surface3); color: var(--c-text); font-weight: bold; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="brand-icon"><i class="fa-solid fa-microchip"></i></div>
+      <div class="brand-text">
+        <span class="brand-title">دوائر موائمة الحاسوب</span>
+        <span class="brand-sub">منصة المراجعة الشاملة للامتحان</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-btn" title="تغيير المظهر" onclick="toggleTheme()">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="main-wrap">
+
+  <div id="home-view">
+
+    <div class="stats-bar">
+      <div class="stat-card blue">
+        <span class="stat-num">75</span>
+        <span class="stat-lbl">سؤال مراجعة</span>
+      </div>
+      <div class="stat-card teal">
+        <span class="stat-num">7</span>
+        <span class="stat-lbl">شرحية ورسم</span>
+      </div>
+      <div class="stat-card amber">
+        <span class="stat-num">4</span>
+        <span class="stat-lbl">تجربة أردوينو</span>
+      </div>
+    </div>
+
+    <a href="https://t.me/dx3ee" target="_blank" class="tg-banner">
+      <div class="tg-left">
+        <i class="fa-brands fa-telegram tg-icon"></i>
+        <div>
+          <div class="tg-title">قناة تيليجرام الخاصة بالمادة</div>
+          <div class="tg-sub">انضم للمجموعة للحصول على آخر التحديثات</div>
+        </div>
+      </div>
+      <i class="fa-solid fa-arrow-left tg-arrow"></i>
+    </a>
+
+    <div class="section-label"><i class="fa-solid fa-layer-group"></i> أقسام المحتوى</div>
+
+    <div class="module-card blue">
+      <div class="module-head">
+        <div class="module-icon blue"><i class="fa-solid fa-brain"></i></div>
+        <div class="module-info">
+          <div class="module-title">المراجعة الشاملة <span class="badge">75 سؤال</span></div>
+          <div class="module-desc">أسئلة اختيار متعدد تغطي جميع المحاور</div>
+        </div>
+      </div>
+      <div class="btn-grid cols-2">
+        <button class="action-btn teal" onclick="startMode('read','g_review')">
+          <i class="fa-solid fa-book-open-reader"></i> قراءة وحفظ
+        </button>
+        <button class="action-btn primary" onclick="startMode('quiz-full','g_review')">
+          <i class="fa-solid fa-list-check"></i> اختبار كامل
+        </button>
+      </div>
+    </div>
+
+    <div class="module-card teal">
+      <div class="module-head">
+        <div class="module-icon teal"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="module-info">
+          <div class="module-title">الشرحيات والرسومات <span class="badge">7 محاور</span></div>
+          <div class="module-desc">مخططات تفصيلية وأسئلة مقالية شاملة</div>
+        </div>
+      </div>
+      <div class="btn-grid cols-1">
+        <button class="action-btn teal" onclick="startMode('read','g_summary')">
+          <i class="fa-solid fa-book-open-reader"></i> قراءة وحفظ المحتوى
+        </button>
+      </div>
+    </div>
+
+    <div class="module-card amber">
+      <div class="module-head">
+        <div class="module-icon amber"><i class="fa-solid fa-code"></i></div>
+        <div class="module-info">
+          <div class="module-title">الجانب العملي – Arduino <span class="badge">4 تجارب</span></div>
+          <div class="module-desc">أكواد كاملة مع شرح تفصيلي لكل تجربة</div>
+        </div>
+      </div>
+      <div class="btn-grid cols-1">
+        <button class="action-btn amber" onclick="startMode('read','g_practical')">
+          <i class="fa-solid fa-terminal"></i> قراءة الأكواد وحفظها
+        </button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label"><i class="fa-solid fa-sliders"></i> اختبارات مخصصة</div>
+
+    <div class="module-card default">
+      <div class="module-head">
+        <div class="module-icon gray"><i class="fa-solid fa-shuffle"></i></div>
+        <div class="module-info">
+          <div class="module-title">اختبار عشوائي</div>
+          <div class="module-desc">اختر عدد الأسئلة من المراجعة الشاملة</div>
+        </div>
+      </div>
+      <div class="input-row single">
+        <input class="field-input" type="number" id="random-num" placeholder="عدد الأسئلة (مثال: 20)" min="1" max="75">
+      </div>
+      <div class="btn-grid cols-1">
+        <button class="action-btn primary" onclick="startMode('quiz-random','g_review')">
+          <i class="fa-solid fa-play"></i> ابدأ الاختبار العشوائي
+        </button>
+      </div>
+    </div>
+
+    <div class="module-card default">
+      <div class="module-head">
+        <div class="module-icon gray"><i class="fa-solid fa-arrows-left-right"></i></div>
+        <div class="module-info">
+          <div class="module-title">اختبار نطاق محدد</div>
+          <div class="module-desc">حدد نطاق الأسئلة من المراجعة الشاملة</div>
+        </div>
+      </div>
+      <div class="input-row">
+        <input class="field-input" type="number" id="range-start" placeholder="من (مثال: 1)" min="1">
+        <input class="field-input" type="number" id="range-end"   placeholder="إلى (مثال: 30)" min="1">
+      </div>
+      <div class="btn-grid cols-1">
+        <button class="action-btn primary" onclick="startMode('quiz-range','g_review')">
+          <i class="fa-solid fa-bolt"></i> ابدأ اختبار النطاق
+        </button>
+      </div>
+    </div>
+
+  </div><div id="quiz-view" style="display:none;">
+    <div class="quiz-topbar">
+      <button class="topbar-btn back" onclick="goHome()">
+        <i class="fa-solid fa-chevron-right"></i> <span class="label">الرئيسية</span>
+      </button>
+
+      <div class="score-display">
+        <div class="score-pill">
+          <span class="score-correct" id="sc-correct">0</span>
+          <span class="score-sep">/</span>
+          <span class="score-total" id="sc-answered">0</span>
+        </div>
+      </div>
+
+      <div class="progress-track" id="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+
+      <button class="topbar-btn finish" id="btn-finish" onclick="showResult()">
+        <span class="label">إنهاء</span> <i class="fa-solid fa-flag-checkered"></i>
+      </button>
+    </div>
+
+    <div id="q-container"></div>
+  </div></main>
+
+<footer class="site-footer">
+  <div>تصميم وتطوير المنصة</div>
+  <div class="footer-names">
+    <span class="footer-name"><i class="fa-solid fa-code" style="color:var(--c-blue)"></i> طارق احمد سعيد</span>
+    <span class="footer-name"><i class="fa-solid fa-code" style="color:var(--c-teal)"></i> ابراهيم محمود حسين</span>
+    <span class="footer-name"><i class="fa-solid fa-code" style="color:var(--c-amber)"></i> علي حمد صالح</span>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="result-modal" style="display:none;">
+  <div class="modal-box">
+    <span class="result-emoji" id="res-emoji">🎉</span>
+    <div class="result-title" id="res-title">نتيجة الاختبار</div>
+    <div class="result-sub"   id="res-sub">أحسنت! واصل مراجعتك</div>
+
+    <div class="result-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="52"/>
+        <circle class="ring-val" id="ring-val" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <span class="result-pct" id="res-pct">0%</span>
+    </div>
+
+    <div class="result-stats">
+      <div class="rs-item">
+        <div class="rs-val" id="rs-correct" style="color:var(--c-green)">0</div>
+        <div class="rs-lbl">صحيحة</div>
+      </div>
+      <div class="rs-item">
+        <div class="rs-val" id="rs-wrong" style="color:var(--c-red)">0</div>
+        <div class="rs-lbl">خاطئة</div>
+      </div>
+      <div class="rs-item">
+        <div class="rs-val" id="rs-total" style="color:var(--c-blue)">0</div>
+        <div class="rs-lbl">إجمالي</div>
+      </div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="goHome()"><i class="fa-solid fa-house"></i> الرئيسية</button>
+      <button class="modal-btn primary"   onclick="hideResult()"><i class="fa-solid fa-eye"></i> مراجعة الإجابات</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════ THEME ════ */
+(function initTheme() {
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const useDark = stored ? stored === 'dark' : prefersDark;
+  if (!useDark) document.body.classList.add('light');
+  updateThemeIcon();
+})();
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem('theme')) {
+    if (e.matches) document.body.classList.remove('light');
+    else           document.body.classList.add('light');
+    updateThemeIcon();
+  }
+});
+
+function updateThemeIcon() {
+  const btn = document.getElementById('theme-btn');
+  if (!btn) return;
+  btn.innerHTML = document.body.classList.contains('light')
+    ? '<i class="fa-solid fa-moon"></i>'
+    : '<i class="fa-solid fa-sun"></i>';
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const isDark = !document.body.classList.contains('light');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  updateThemeIcon();
+}
+
+/* ════ DATA (من ملف The last exam.html الأصلي) ════ */
+var group_review = [
+    { q: "1. It is possible to limit current in a circuit by using", options: ["Capacitor", "Inductor", "Resistor", "Bridge rectifier"], ans: 2, note: "الترجمة: يمكن تحديد التيار في الدائرة باستخدام؟<br>الإجابة: Resistor (مقاومة)" },
+    { q: "2. An electronic device with Schmitt-trigger capability removes ___ from its output.", options: ["Heat", "Overload", "Noise", "Voltage"], ans: 2, note: "الترجمة: جهاز إلكتروني بخاصية Schmitt-trigger يزيل ___ من مخرجاته.<br>الإجابة: Noise (الضجيج)" },
+    { q: "3. A LED must have ___ connected in series with it.", options: ["Capacitor", "Inductor", "Resistor", "Bridge rectifier"], ans: 2, note: "الترجمة: يجب أن يوصل مع الـ LED ___ على التوالي.<br>الإجابة: Resistor (مقاومة)" },
+    { q: "4. When a switch changes position, the output signal oscillates briefly before settling. This effect is called", options: ["Switching", "Changing", "Resting", "Bouncing"], ans: 3, note: "الترجمة: تذبذب الإشارة عند تغيير حالة المفتاح يسمى؟<br>الإجابة: Bouncing (الارتداد)" },
+    { q: "5. In a DC power-supply, which component converts AC to DC?", options: ["Transformer", "Rectifier", "Filter capacitor", "Voltage regulator"], ans: 1, note: "الترجمة: في مجهز الطاقة المستمر، أي مكون يحول التيار المتردد إلى مستمر؟<br>الإجابة: Rectifier (المقوم)" },
+    { q: "6. Which part of a power supply keeps voltage constant despite load changes?", options: ["Fuse", "Transformer", "Regulator", "Rectifier"], ans: 2, note: "الترجمة: أي جزء يحافظ على ثبات الجهد رغم تغير الحمل؟<br>الإجابة: Regulator (المنظم)" },
+    { q: "7. What is the function of the smoothing capacitor in a rectifier circuit?", options: ["Reduce ripple", "Step down voltage", "Limit current", "Increase voltage"], ans: 0, note: "الترجمة: ما وظيفة مكثف التنعيم؟<br>الإجابة: Reduce ripple (تقليل التموج)" },
+    { q: "8. The resistor in a resistor-zener regulator mainly", options: ["Provides bias", "Limits current", "Stores charge", "Rectifies AC"], ans: 1, note: "الترجمة: المقاومة في منظم الزينر تعمل بشكل أساسي على؟<br>الإجابة: Limits current (تحديد التيار)" },
+    { q: "9. The Schmitt trigger circuit is used to", options: ["Amplify analog signals", "Remove bouncing and noise", "Step up voltage", "Filter AC"], ans: 1, note: "الترجمة: تستخدم دائرة Schmitt trigger لـ؟<br>الإجابة: Remove bouncing and noise (إزالة الارتداد والضجيج)" },
+    { q: "10. The S17660 device is used as", options: ["Rectifier", "Voltage inverter (DC-DC)", "Comparator", "Amplifier"], ans: 1, note: "الترجمة: يستخدم جهاز S17660 كـ؟<br>الإجابة: Voltage inverter (DC-DC) (عاكس للجهد)" },
+    { q: "11. The main function of a power supply is to:", options: ["Measure electrical current", "Convert one form of electrical energy to another", "Store electrical energy", "Generate mechanical motion"], ans: 1, note: "الترجمة: الوظيفة الرئيسية لمجهز الطاقة هي؟<br>الإجابة: Convert one form of electrical energy to another" },
+    { q: "12. The transformer in a DC power supply is used to:", options: ["Reduce ripple", "Change input voltage levels", "Convert AC to DC", "Generate mechanical motion"], ans: 1, note: "الترجمة: يستخدم المحول في مجهز الطاقة لـ؟<br>الإجابة: Change input voltage levels (تغيير مستويات جهد الدخل)" },
+    { q: "13. The rectifier's job in a DC power supply is to:", options: ["Regulate current flow", "Smooth the voltage", "Convert AC to DC", "Generate mechanical motion"], ans: 2, note: "الترجمة: وظيفة المقوم هي؟<br>الإجابة: Convert AC to DC (تحويل المتناوب لمستمر)" },
+    { q: "14. The smoothing capacitor is used to:", options: ["Control current flow", "Reduce AC ripple on DC voltage", "Increase voltage", "Provide over-voltage protection"], ans: 1, note: "الترجمة: يستخدم مكثف التنعيم لـ؟<br>الإجابة: Reduce AC ripple on DC voltage (تقليل التموج المتناوب)" },
+    { q: "15. Voltage regulation is important to:", options: ["Store electrical charge", "Increase AC input", "Provide a fixed output voltage", "Perform unrelated function"], ans: 2, note: "الترجمة: تنظيم الجهد مهم لـ؟<br>الإجابة: Provide a fixed output voltage (توفير جهد خرج ثابت)" },
+    { q: "16. In a dual DC power supply, +16V and -16V outputs are provided for:", options: ["Over-voltage protection", "Balanced DC operation", "Audio amplification", "Generate mechanical motion"], ans: 1, note: "الترجمة: يتم توفير خرج +16V و -16V من أجل؟<br>الإجابة: Balanced DC operation (تشغيل مستمر متوازن)" },
+    { q: "17. The primary fuse in the circuit protects against:", options: ["Temperature rise", "Overcurrent", "Low current", "Perform unrelated function"], ans: 1, note: "الترجمة: الفيوز الأساسي يحمي من؟<br>الإجابة: Overcurrent (زيادة التيار)" },
+    { q: "18. Resettable fuses automatically:", options: ["Convert AC to DC", "Reset after fault removal", "Disconnect permanently", "Perform unrelated function"], ans: 1, note: "الترجمة: الفيوزات القابلة لإعادة الضبط تعمل على؟<br>الإجابة: Reset after fault removal (إعادة الضبط بعد زوال العطل)" },
+    { q: "19. The NME series converters provide:", options: ["Voltage inversion", "Non-isolated AC outputs", "Isolated DC outputs", "Provide wireless communication"], ans: 2, note: "الترجمة: توفر محولات NME؟<br>الإجابة: Isolated DC outputs (مخرجات تيار مستمر معزولة)" },
+    { q: "20. The NMA series converters provide:", options: ["AC voltage output", "Single DC output", "Dual DC outputs", "Provide wireless communication"], ans: 2, note: "الترجمة: توفر محولات NMA؟<br>الإجابة: Dual DC outputs (مخرجات تيار مستمر مزدوجة)" },
+    { q: "21. The purpose of isolation in power circuits is to:", options: ["Double the voltage", "Prevent electrical interference between circuits", "Reduce ripple", "Generate mechanical motion"], ans: 1, note: "الترجمة: الغرض من العزل في دوائر الطاقة هو؟<br>الإجابة: Prevent electrical interference between circuits (منع التداخل الكهربائي)" },
+    { q: "22. Logic status generators use SPDT switches to:", options: ["Amplify signals", "Rectify voltage", "Generate logic states", "Measure analog voltage"], ans: 2, note: "الترجمة: تستخدم مولدات الحالة المنطقية مفاتيح SPDT لـ؟<br>الإجابة: Generate logic states (توليد الحالات المنطقية)" },
+    { q: "23. The Centronic ports is a", options: ["Parallel port", "Serial port", "LED port", "External port"], ans: 0, note: "الترجمة: منفذ السنترونيك هو منفذ؟<br>الإجابة: Parallel port (متوازي)" },
+    { q: "24. A Centronic port is also called", options: ["Printer port", "Speaker port", "Plotter port", "Hard disk port"], ans: 0, note: "الترجمة: يسمى منفذ السنترونيك أيضاً بـ؟<br>الإجابة: Printer port (منفذ الطابعة)" },
+    { q: "25. The number of bits transferred from the transmitter to the receiver in a second is called", options: ["Bit rate", "Byte rate", "Nibble rate", "Baud rate"], ans: 3, note: "الترجمة: عدد البتات المنقولة في الثانية يسمى؟<br>الإجابة: Baud rate (معدل الباود)" },
+    { q: "26. What type of port is the Centronic port?", options: ["Serial port", "Parallel port", "USB port", "Game port"], ans: 1, note: "الترجمة: ما نوع منفذ السنترونيك؟<br>الإجابة: Parallel port (منفذ متوازي)" },
+    { q: "27. What is the maximum number of Centronic ports that can be installed on a PC?", options: ["2", "3", "4", "5"], ans: 2, note: "الترجمة: أقصى عدد من منافذ السنترونيك الممكن تثبيتها؟<br>الإجابة: 4" },
+    { q: "28. What are the logic names assigned to Centronic ports?", options: ["COM1 to COM4", "USB1 to USB4", "LPT1 to LPT4", "PORTA to PORTD"], ans: 2, note: "الترجمة: الأسماء المنطقية لمنافذ السنترونيك؟<br>الإجابة: LPT1 to LPT4" },
+    { q: "29. What is the maximum recommended cable length for Centronic port connections?", options: ["10 meters", "7 meters", "5 meters", "3 meters"], ans: 2, note: "الترجمة: أقصى طول موصى به لكابل السنترونيك؟<br>الإجابة: 5 meters (أمتار)" },
+    { q: "30. Which connector type is used on the computer side of the Centronic port?", options: ["36-pin Centronic male", "25-pin D-type female", "9-pin serial", "USB Type-A"], ans: 1, note: "الترجمة: نوع الموصل المستخدم في جهة الكمبيوتر لمنفذ السنترونيك؟<br>الإجابة: 25-pin D-type female" },
+    { q: "31. Which group of pins sends data from the PC to external devices?", options: ["All of them", "Status group", "Data group", "Power group"], ans: 2, note: "الترجمة: أي مجموعة دبابيس ترسل البيانات من الكمبيوتر للأجهزة الخارجية؟<br>الإجابة: Data group (مجموعة البيانات)" },
+    { q: "32. Which group of pins is used to monitor the status of external devices?", options: ["Control group", "Status group", "Data group", "Interrupt group"], ans: 1, note: "الترجمة: أي مجموعة تستخدم لمراقبة حالة الأجهزة الخارجية؟<br>الإجابة: Status group (مجموعة الحالة)" },
+    { q: "33. Which control lines are inverted in the Centronic port?", options: ["STROBE, -LF/CR, -SLIN", "INITIALIZE only", "BUSY", "ERROR, SLCT"], ans: 0, note: "الترجمة: أي خطوط التحكم معكوسة في منفذ السنترونيك؟<br>الإجابة: STROBE, -LF/CR, -SLIN" },
+    { q: "34. Which line in the Status group is inverted?", options: ["ERROR", "SLCT", "BUSY", "PE"], ans: 2, note: "الترجمة: أي خط في مجموعة الحالة معكوس؟<br>الإجابة: BUSY" },
+    { q: "35. What is the data transfer rate of the Centronic port?", options: ["Less than 1 Kbyte/sec", "Around 100 Kbyte/sec", "Greater than 1 Mbyte/sec", "10 Mbyte/sec"], ans: 1, note: "الترجمة: معدل نقل البيانات لمنفذ السنترونيك؟<br>الإجابة: Around 100 Kbyte/sec" },
+    { q: "36. Which BIOS memory location stores the address of LPT1?", options: ["0000:040Ah", "0000:040Ch", "0000:0408h", "0000:040Eh"], ans: 2, note: "الترجمة: أي موقع في ذاكرة BIOS يخزن عنوان LPT1؟<br>الإجابة: 0000:0408h" },
+    { q: "37. What is the address used to access the Status group in the Centronic port?", options: ["Base address", "Base address + 1", "Base address + 2", "Base address + 3"], ans: 1, note: "الترجمة: العنوان المستخدم للوصول لمجموعة الحالة؟<br>الإجابة: Base address + 1" },
+    { q: "38. What is the address used to access the Control group in the Centronic port?", options: ["Base address", "Base address + 1", "Base address + 2", "Base address + 3"], ans: 2, note: "الترجمة: العنوان المستخدم للوصول لمجموعة التحكم؟<br>الإجابة: Base address + 2" },
+    { q: "39. What is the purpose of the STROBE signal in the Control group?", options: ["To reset the device", "To indicate error", "To latch data into the external device", "To read status"], ans: 2, note: "الترجمة: الغرض من إشارة STROBE في مجموعة التحكم؟<br>الإجابة: To latch data into the external device (لتخزين البيانات في الجهاز الخارجي)" },
+    { q: "40. Which software methods can be used to access LPT ports?", options: ["BIOS interrupt routines", "QBASIC", "TP6", "All of the above"], ans: 3, note: "الترجمة: أي الطرق البرمجية تستخدم للوصول لمنافذ LPT؟<br>الإجابة: All of the above (جميع ما سبق)" },
+    { q: "41. The Centronic interface is suitable for:", options: ["Wireless transmission", "Short distance communication", "Long distance communication", "Enable wireless printing"], ans: 1, note: "الترجمة: واجهة السنترونيك مناسبة لـ؟<br>الإجابة: Short distance communication (الاتصال لمسافات قصيرة)" },
+    { q: "42. The Data group has:", options: ["8 bits", "5 bits", "4 bits", "Perform unrelated function"], ans: 0, note: "الترجمة: مجموعة البيانات تحتوي على؟<br>الإجابة: 8 bits (بتات)" },
+    { q: "43. The three pin groups in the parallel port are:", options: ["Data, Control, Status", "Address, Data, Clock", "Input, Output, Ground", "None of them"], ans: 0, note: "الترجمة: الثلاث مجموعات في المنفذ المتوازي هي؟<br>الإجابة: Data, Control, Status (بيانات، تحكم، حالة)" },
+    { q: "44. LPT base address can be found by:", options: ["Power supply readings", "Windows Device Manager only", "BIOS or hardware configuration", "Enable wireless printing"], ans: 2, note: "الترجمة: عنوان قاعدة LPT يمكن إيجاده بواسطة؟<br>الإجابة: BIOS or hardware configuration" },
+    { q: "45. BIOS writes port addresses during:", options: ["Printing process", "Power-on or reset", "System sleep", "Perform unrelated function"], ans: 1, note: "الترجمة: نظام الـ BIOS يكتب عناوين المنافذ أثناء؟<br>الإجابة: Power-on or reset (التشغيل أو إعادة الضبط)" },
+    { q: "46. Which of the following best describes the RS-232 standard?", options: ["A protocol for wireless communication", "A standard for serial communication between two devices", "A protocol for parallel communication", "A standard for Ethernet communication"], ans: 1, note: "الترجمة: أفضل وصف لمعيار RS-232؟<br>الإجابة: A standard for serial communication between two devices (معيار للاتصال التسلسلي بين جهازين)" },
+    { q: "47. What type of communication does RS-232 support?", options: ["Parallel communication", "Serial communication", "USB communication", "Network communication"], ans: 1, note: "الترجمة: نوع الاتصال الذي يدعمه RS-232؟<br>الإجابة: Serial communication (اتصال تسلسلي)" },
+    { q: "48. The minimum number of data bits in a serial data transmission format is:", options: ["5 bits", "6 bits", "7 bits", "8 bits"], ans: 0, note: "الترجمة: أقل عدد من بتات البيانات في النقل التسلسلي هو؟<br>الإجابة: 5 bits" },
+    { q: "49. What is the role of the RTS (Request to Send) signal in RS-232?", options: ["Indicates that the transmitter is ready to send data", "Indicates that the receiver is ready to receive data", "Provides a clock signal for synchronization", "Marks the beginning of a data frame"], ans: 0, note: "الترجمة: دور إشارة RTS؟<br>الإجابة: Indicates that the transmitter is ready to send data (تشير إلى أن المرسل جاهز للإرسال)" },
+    { q: "50. In RS-232, what is the purpose of stop bits?", options: ["To indicate the beginning of a data frame", "To mark the end of a data frame", "To detect errors in the transmitted data", "To synchronize the clock between sender and receiver"], ans: 1, note: "الترجمة: الغرض من بت التوقف؟<br>الإجابة: To mark the end of a data frame (وضع علامة على نهاية إطار البيانات)" },
+    { q: "51. Which of the following is NOT a part of the RS-232 serial data frame?", options: ["Start bit", "Data bits", "Parity bit", "Clock signal"], ans: 3, note: "الترجمة: أي من التالي ليس جزءًا من إطار RS-232؟<br>الإجابة: Clock signal (إشارة الساعة)" },
+    { q: "52. What is the purpose of the parity bit in a serial data frame?", options: ["To increase the data transfer rate", "To detect errors during transmission", "To synchronize the transmitter and receiver", "To mark the end of the data frame"], ans: 1, note: "الترجمة: الغرض من بت التكافؤ؟<br>الإجابة: To detect errors during transmission (لاكتشاف الأخطاء أثناء النقل)" },
+    { q: "53. What is the typical data width in RS-232 communication?", options: ["4 bits", "7 or 8 bits", "16 bits", "32 bits"], ans: 1, note: "الترجمة: العرض النموذجي للبيانات في RS-232؟<br>الإجابة: 7 or 8 bits" },
+    { q: "54. Which of the following is NOT a common baud rate for RS-232 communication?", options: ["9600", "19200", "115200", "1 Mbps"], ans: 3, note: "الترجمة: أي من التالي ليس معدل باود شائع لـ RS-232؟<br>الإجابة: 1 Mbps" },
+    { q: "55. Which of the following is a common baud rate supported by UARTs?", options: ["9600 bps", "1 Mbps", "100 kHz", "50 Hz"], ans: 0, note: "الترجمة: معدل الباود الشائع الذي يدعمه UART؟<br>الإجابة: 9600 bps" },
+    { q: "56. What is the maximum recommended communication distance for RS-232?", options: ["5 meters", "10 meters", "20 meters", "50 meters"], ans: 2, note: "الترجمة: المسافة القصوى الموصى بها لـ RS-232؟<br>الإجابة: 20 meters" },
+    { q: "57. What is the effect of increasing the baud rate on error tolerance?", options: ["Increases error tolerance", "Decreases error tolerance", "Has no effect on error tolerance", "Reduces the need for parity bits"], ans: 1, note: "الترجمة: تأثير زيادة معدل الباود على تحمل الأخطاء؟<br>الإجابة: Decreases error tolerance (يقلل من تحمل الأخطاء)" },
+    { q: "58. Which setting provides the best error tolerance in UART communication?", options: ["Parity bit with 5 data bits at 110 symbols/second", "No parity with 8 data bits at 9600 symbols/second", "No parity with 8 data bits at 19200 symbols/second", "Parity with 7 data bits at 4800 symbols/second"], ans: 0, note: "الترجمة: أي إعداد يوفر أفضل تحمل للأخطاء؟<br>الإجابة: Parity bit with 5 data bits at 110 symbols/second" },
+    { q: "59. Which setting provides the highest throughput in UART communication?", options: ["Parity bit with 5 data bits at 110 symbols/second", "No parity with 8 data bits at 9600 symbols/second", "No parity with 8 data bits at 19200 symbols/second", "Parity with 7 data bits at 4800 symbols/second"], ans: 2, note: "الترجمة: أعلى إنتاجية في UART؟<br>الإجابة: No parity with 8 data bits at 19200 symbols/second" },
+    { q: "60. What does the term 'UART' stand for?", options: ["Universal Asynchronous Receiver-Transmitter", "Universal Analog Radio Transmitter", "Universal Asynchronous Relay Terminal", "Universal Access Router Transmitter"], ans: 0, note: "الترجمة: ماذا يعني اختصار UART؟<br>الإجابة: Universal Asynchronous Receiver-Transmitter" },
+    { q: "61. Which component generates and receives asynchronous serial data in computers?", options: ["Modem", "UART", "RS-232 driver/receiver", "Parallel port controller"], ans: 1, note: "الترجمة: أي مكون يولد ويستقبل البيانات التسلسلية غير المتزامنة؟<br>الإجابة: UART" },
+    { q: "62. What is the primary difference between UART and RS-232?", options: ["UART is a hardware protocol while RS-232 is software", "UART generates TTL/CMOS levels while RS-232 uses higher voltage levels", "UART supports only synchronous communication", "UART requires a clock signal while RS-232 does not"], ans: 1, note: "الترجمة: الفرق الرئيسي بين UART و RS-232؟<br>الإجابة: UART generates TTL/CMOS levels while RS-232 uses higher voltage levels" },
+    { q: "63. Which of the following connectors is commonly used for RS-232 communication?", options: ["RJ45", "USB Type-C", "DB9", "HDMI"], ans: 2, note: "الترجمة: الموصل الشائع لـ RS-232؟<br>الإجابة: DB9" },
+    { q: "64. What is the purpose of the DTR (Data Terminal Ready) signal in RS-232?", options: ["Indicates the PC is ready to communicate", "Requests permission to send data", "Grants permission to send data", "Marks the end of a data frame"], ans: 0, note: "الترجمة: الغرض من إشارة DTR؟<br>الإجابة: Indicates the PC is ready to communicate (يشير إلى أن الكمبيوتر جاهز للاتصال)" },
+    { q: "65. A connection used to connect serial devices and can be in 3 wires or 8 wires is called:", options: ["Fiber optics modem", "Full modem", "Null modem", "Wi-Fi modem"], ans: 2, note: "الترجمة: اتصال يربط الأجهزة التسلسلية بـ 3 أو 8 أسلاك يسمى؟<br>الإجابة: Null modem" },
+    { q: "66. What is the primary function of a Programmable UART chip?", options: ["To generate clock signals for microcontrollers", "To convert parallel data into serial data and vice versa", "To provide power management for peripheral devices", "To amplify analog signals"], ans: 1, note: "الترجمة: الوظيفة الأساسية لرقاقة UART قابلة للبرمجة؟<br>الإجابة: To convert parallel data into serial data and vice versa" },
+    { q: "67. Which IC is widely used for converting TTL signals to RS-232 signals?", options: ["74LS04", "MAX232", "LM358", "SN75179"], ans: 1, note: "الترجمة: أي آيسي يستخدم لتحويل إشارات TTL إلى RS-232؟<br>الإجابة: MAX232" },
+    { q: "68. How many drivers and receivers does the MAX232 contain?", options: ["1 driver, 1 receiver", "2 drivers, 2 receivers", "4 drivers, 4 receivers", "8 drivers, 8 receivers"], ans: 1, note: "الترجمة: كم عدد المحركات والمستقبلات في MAX232؟<br>الإجابة: 2 drivers, 2 receivers" },
+    { q: "69. Why is a line driver used with UARTs when interfacing with RS-232 devices?", options: ["To reduce the baud rate of the UART", "To convert TTL/CMOS logic levels to RS-232 voltage levels", "To synchronize the transmitter and receiver", "To provide wireless communication"], ans: 1, note: "الترجمة: لماذا يُستخدم line driver مع UART؟<br>الإجابة: To convert TTL/CMOS logic levels to RS-232 voltage levels" },
+    { q: "70. What is a line driver?", options: ["A circuit used to amplify sound signals", "A circuit used to convert logic voltage levels for communication interfaces", "A memory storage device", "A type of microprocessor"], ans: 1, note: "الترجمة: ما هو line driver؟<br>الإجابة: A circuit used to convert logic voltage levels for communication interfaces" },
+    { q: "71. The role of serial-to-parallel converter is to:", options: ["Convert serial data to parallel format", "Convert serial pins to parallel pins", "Convert serial register to parallel register", "Convert serial tristate buffer to parallel tristate buffer"], ans: 0, note: "الترجمة: دور محول السيريال إلى باراليل هو؟<br>الإجابة: Convert serial data to parallel format" },
+    { q: "72. What are the main internal components of a microcontroller?", options: ["CPU, RAM, ROM, I/O ports, timers", "Monitor, keyboard, mouse, hard disk", "Only ALU and RAM", "Only ROM and UART"], ans: 0, note: "الترجمة: المكونات الداخلية الرئيسية للمتحكم الدقيق؟<br>الإجابة: CPU, RAM, ROM, I/O ports, timers" },
+    { q: "73. It is possible to limit the current using", options: ["A capacitor", "An inductor", "A resistor", "A bridge rectifier"], ans: 2, note: "الترجمة: يمكن تحديد التيار باستخدام؟<br>الإجابة: A resistor" },
+    { q: "74. The simplest way of converting RS232 voltage level to TTL voltage level can use:", options: ["A transformer", "A voltage clamp circuit with resistor and 5.1V Zener diode", "A bridge rectifier", "A relay"], ans: 1, note: "الترجمة: أبسط طريقة لتحويل جهد RS232 إلى TTL تستخدم؟<br>الإجابة: A voltage clamp circuit with resistor and 5.1V Zener diode" },
+    { q: "75. What is a microcontroller?", options: ["A CPU used only in desktop computers", "A single-chip computer with CPU and peripherals like RAM, ROM, and I/O on the same chip", "A device used only for serial communication", "A memory chip used for data storage"], ans: 1, note: "الترجمة: ما هو المتحكم الدقيق؟<br>الإجابة: A single-chip computer with CPU and peripherals like RAM, ROM, and I/O on the same chip" }
+];
+
+var group_summary = [
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ Define the power supply and sort the main components.</b><br><br><b>Power Supply:</b><br>A power supply is a hardware component that supplies power to an electrical device or load.<br><br><b>The dc power supply consists of:</b><br>1- Fuse (optional).<br>2- Transformer (to step down the voltage.)<br>3- Rectifier (Remove the -ve part of signal into +Ve)<br>4- Smoothing (remove the ripple from the signal)<br>5- Regulation (optional). (to ensure the stability of the voltage).</div>",
+        img: "",
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ عرّف مجهز الطاقة وصنف مكوناته الرئيسية.</b><br><br><b>مجهز الطاقة:</b> مكون مادي يزود الجهاز الكهربائي أو الحمل بالطاقة.<br><br><b>يتكون مجهز طاقة التيار المستمر (DC) من:</b><br>1- المصهر (Fuse) (اختياري).<br>2- المحول (Transformer) (لخفض الجهد).<br>3- المقوم (Rectifier) (لتحويل الجزء السالب من الإشارة إلى موجب).<br>4- التنعيم (Smoothing) (لإزالة التموج من الإشارة).<br>5- التنظيم (Regulation) (اختياري، لضمان استقرار الجهد).</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ What are the use cases of centronic port and RS232 and game port?</b><br><br>• <b>Centronic ports</b> are used for connecting computers to printers.<br>• <b>RS232 ports</b> for connecting printers, modems and mice.<br>• <b>Game ports</b> for connecting joysticks.</div>",
+        img: "",
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ ما هي استخدامات منفذ السنترونيك ومنفذ RS232 ومنفذ الألعاب؟</b><br><br>• <b>منافذ السنترونيك:</b> تُستخدم لربط أجهزة الكمبيوتر بالطابعات.<br>• <b>منافذ RS232:</b> تُستخدم لربط الطابعات، أجهزة المودم، والماوس.<br>• <b>منافذ الألعاب (Game ports):</b> تُستخدم لربط أذرع التحكم (joysticks).</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ Draw the Isolated DC/DC converters (NME- NMA)</b></div>",
+        img: `<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="background:var(--bg-card); border-radius:8px; width:100%; max-width:500px; padding:10px; border: 1px solid var(--card-border);">
+                <text x="125" y="20" fill="var(--text-main)" text-anchor="middle" font-size="12">Isolation barrier</text>
+                <rect x="50" y="30" width="150" height="60" fill="var(--bg-hover)" stroke="var(--card-border)" stroke-width="2"/>
+                <line x1="125" y1="30" x2="125" y2="120" stroke="var(--text-dim)" stroke-dasharray="4,4"/>
+                <line x1="65" y1="90" x2="65" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="65" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">1</text><text x="65" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">GND</text>
+                <line x1="105" y1="90" x2="105" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="105" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">2</text><text x="105" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">VCC</text>
+                <line x1="145" y1="90" x2="145" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="145" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">3</text><text x="145" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">0V</text>
+                <line x1="185" y1="90" x2="185" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="185" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">4</text><text x="185" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">V+</text>
+                <text x="85" y="175" fill="var(--text-dim)" font-size="10" text-anchor="middle">INPUT VOLTAGE</text><text x="165" y="175" fill="var(--text-dim)" font-size="10" text-anchor="middle">OUTPUT VOLTAGE</text>
+                <text x="125" y="195" fill="var(--primary)" font-size="12" text-anchor="middle" font-weight="bold">(a) NME single output</text>
+
+                <text x="375" y="20" fill="var(--text-main)" text-anchor="middle" font-size="12">Isolation barrier</text>
+                <rect x="280" y="30" width="190" height="60" fill="var(--bg-hover)" stroke="var(--card-border)" stroke-width="2"/>
+                <line x1="340" y1="30" x2="340" y2="120" stroke="var(--text-dim)" stroke-dasharray="4,4"/>
+                <line x1="295" y1="90" x2="295" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="295" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">1</text><text x="295" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">GND</text>
+                <line x1="325" y1="90" x2="325" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="325" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">2</text><text x="325" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">VCC</text>
+                <line x1="385" y1="90" x2="385" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="385" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">3</text><text x="385" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">V-</text>
+                <line x1="415" y1="90" x2="415" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="415" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">4</text><text x="415" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">0V</text>
+                <line x1="445" y1="90" x2="445" y2="120" stroke="var(--text-main)" stroke-width="3"/><text x="445" y="135" fill="var(--text-main)" font-size="10" text-anchor="middle">5</text><text x="445" y="150" fill="var(--text-main)" font-size="10" text-anchor="middle">V+</text>
+                <text x="310" y="175" fill="var(--text-dim)" font-size="10" text-anchor="middle">INPUT VOLTAGE</text><text x="415" y="175" fill="var(--text-dim)" font-size="10" text-anchor="middle">OUTPUT VOLTAGE</text>
+                <text x="375" y="195" fill="var(--primary)" font-size="12" text-anchor="middle" font-weight="bold">(b) NMA dual output</text>
+              </svg>`,
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ ارسم محولات DC/DC المعزولة (NME و NMA).</b><br>هذا الرسم يوضح المحولات التي تقوم بعزل الدخل عن الخرج، حيث يوفر NME خرجاً مفرداً، بينما يوفر NMA خرجاً مزدوجاً.</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ What is a Microcontroller? And what are Components of a microcontroller?</b><br><br><b>1. What is a Microcontroller?</b><br>A single chip computer or A CPU with all the peripherals like RAM, ROM, I/O Ports, Timers, ADCs etc. on the same chip.<br><br><b>2. Components of a microcontroller:</b><br>1. CPU: Central Processing Unit.<br>2. I/O: Input/Output.<br>3. Bus: Address bus & Data bus.<br>4. Memory: RAM & ROM.<br>5. Timer.<br>6. Interrupt.<br>7. Serial Port.<br>8. Parallel Port.</div>",
+        img: "",
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ ما هو المتحكم الدقيق؟ وما هي مكوناته؟</b><br><br><b>1. المتحكم الدقيق:</b><br>هو حاسوب في شريحة واحدة، أو وحدة معالجة مركزية (CPU) تحتوي على جميع الملحقات مثل (RAM, ROM, I/O Ports, Timers, ADCs) داخل نفس الشريحة.<br><br><b>2. مكونات المتحكم الدقيق:</b><br>1- وحدة المعالجة المركزية (CPU).<br>2- الإدخال/الإخراج (I/O).<br>3- النواقل (Bus).<br>4- الذاكرة (RAM & ROM).<br>5- المؤقتات (Timer).<br>6- المقاطعة (Interrupt).<br>7- المنفذ التسلسلي.<br>8- المنفذ المتوازي.</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ Draw the +5V power supply using Zener diode.</b></div>",
+        img: `<svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg" style="background:var(--bg-card); border-radius:8px; width:100%; max-width:450px; padding:10px; border: 1px solid var(--card-border);">
+                <text x="250" y="30" fill="var(--text-main)" text-anchor="middle" font-weight="bold" font-size="16">+5V Power Supply (Zener Diode)</text>
+                <circle cx="50" cy="80" r="4" fill="var(--text-main)"/>
+                <text x="35" y="105" fill="var(--text-main)" font-family="monospace" font-weight="bold" font-size="16">+16V</text>
+                <line x1="50" y1="80" x2="150" y2="80" stroke="var(--primary)" stroke-width="2"/>
+                
+                <rect x="150" y="70" width="60" height="20" fill="var(--bg-hover)" stroke="var(--primary)" stroke-width="2"/>
+                <text x="180" y="55" fill="var(--warning)" text-anchor="middle" font-size="14" font-weight="bold">R = 440 Ω</text>
+                
+                <line x1="210" y1="80" x2="300" y2="80" stroke="var(--primary)" stroke-width="2"/>
+                <circle cx="300" cy="80" r="4" fill="var(--text-main)"/>
+                
+                <line x1="300" y1="80" x2="400" y2="80" stroke="var(--primary)" stroke-width="2"/>
+                <circle cx="400" cy="80" r="4" fill="var(--text-main)"/>
+                <text x="435" y="75" fill="var(--text-main)" font-family="monospace" text-anchor="middle" font-weight="bold">+5.1V</text>
+                <text x="445" y="95" fill="var(--text-dim)" font-family="monospace" text-anchor="middle" font-size="12">Max: 20mA</text>
+                
+                <line x1="300" y1="80" x2="300" y2="120" stroke="var(--primary)" stroke-width="2"/>
+                <polygon points="290,140 310,140 300,120" fill="var(--primary)"/>
+                <path d="M 285 120 L 315 120 L 315 115" fill="none" stroke="var(--primary)" stroke-width="2"/>
+                <text x="360" y="135" fill="var(--success)" font-size="14" text-anchor="middle" font-weight="bold">5V1 Zener</text>
+                <line x1="300" y1="140" x2="300" y2="180" stroke="var(--primary)" stroke-width="2"/>
+                
+                <line x1="50" y1="180" x2="400" y2="180" stroke="var(--primary)" stroke-width="2"/>
+                <circle cx="50" cy="180" r="4" fill="var(--text-main)"/>
+                <text x="35" y="170" fill="var(--text-main)" font-family="monospace" font-weight="bold" font-size="16">GND</text>
+                <circle cx="400" cy="180" r="4" fill="var(--text-main)"/>
+                <text x="430" y="185" fill="var(--text-main)" font-family="monospace" font-weight="bold" font-size="16">GND</text>
+                <circle cx="300" cy="180" r="4" fill="var(--text-main)"/>
+                
+                <path d="M 270 125 L 270 145 L 265 140" fill="none" stroke="var(--danger)" stroke-width="1.5"/>
+                <text x="245" y="140" fill="var(--danger)" font-size="12" font-weight="bold">5 mA</text>
+              </svg>`,
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ ارسم مجهز طاقة 5 فولت باستخدام الزينر دايود.</b><br>الرسم يوضح دائرة تنظيم الجهد، يتم تخفيض الدخل (16V+) عبر المقاومة (440 أوم)، ليقوم الزينر دايود (5V1) بتثبيت جهد الخرج عند 5.1 فولت تيار مستمر وبحد أقصى للتيار 20mA.</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>RS232 comm Block Diagram</b><br><br>For serial communication, the line used to transmit data is called TX and the line used to receive data is called RX. The level converter is required to translate the voltage level of the microcontroller to the RS232 voltage level.<br><br>The microcontroller operates at TTL level (0V= logic 0, +5V logic 1), whereas RS232 uses around +/-12V. A very famous RS232 level converter is the MAX232 chip.</div>",
+        img: `<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg" style="background:var(--bg-card); border-radius:8px; width:100%; max-width:600px; padding:10px; border: 1px solid var(--card-border);">
+                <rect x="20" y="30" width="120" height="80" fill="#a0c4ff" stroke="var(--card-border)" stroke-width="2"/>
+                <text x="80" y="65" fill="#000" text-anchor="middle" font-weight="bold">PIC</text>
+                <text x="80" y="85" fill="#000" text-anchor="middle" font-weight="bold">Microcontroller</text>
+                
+                <rect x="220" y="30" width="120" height="80" fill="#fdf2a6" stroke="var(--card-border)" stroke-width="2"/>
+                <text x="280" y="55" fill="#000" text-anchor="middle" font-weight="bold">Level</text>
+                <text x="280" y="70" fill="#000" text-anchor="middle" font-weight="bold">Converter</text>
+                <text x="280" y="85" fill="#000" text-anchor="middle" font-size="11">(MAX232 or</text>
+                <text x="280" y="100" fill="#000" text-anchor="middle" font-size="11">compatible)</text>
+
+                <rect x="460" y="15" width="120" height="110" fill="#c3e8cd" stroke="var(--card-border)" stroke-width="2"/>
+                <text x="520" y="35" fill="#000" text-anchor="middle" font-weight="bold">PC</text>
+                
+                <rect x="470" y="45" width="100" height="70" fill="#fff" stroke="#000"/>
+                <rect x="470" y="45" width="100" height="15" fill="#000080"/>
+                <text x="520" y="80" fill="#000" text-anchor="middle" font-weight="bold" font-size="12">Terminal</text>
+                <text x="520" y="95" fill="#000" text-anchor="middle" font-weight="bold" font-size="12">Program</text>
+
+                <path d="M 140 50 L 210 50" fill="none" stroke="var(--text-main)" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="175" y="45" fill="var(--text-main)" text-anchor="middle" font-size="12" font-weight="bold">TX</text>
+                
+                <path d="M 210 90 L 140 90" fill="none" stroke="var(--text-main)" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="175" y="85" fill="var(--text-main)" text-anchor="middle" font-size="12" font-weight="bold">RX</text>
+
+                <path d="M 340 50 L 450 50" fill="none" stroke="var(--text-main)" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="395" y="45" fill="var(--text-main)" text-anchor="middle" font-size="12" font-weight="bold">Serial Cable*</text>
+                
+                <path d="M 450 90 L 340 90" fill="none" stroke="var(--text-main)" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <text x="30" y="150" fill="var(--text-dim)" text-anchor="start" font-size="11">* or USB-to-Serial Converter</text>
+                <text x="440" y="150" fill="var(--text-dim)" text-anchor="start" font-size="9">rs232_comm_block_diagram.ppt, v1.0</text>
+
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L0,6 L9,3 z" fill="var(--text-main)" />
+                    </marker>
+                </defs>
+              </svg>`,
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>المخطط الكتلي لاتصال RS232</b><br><br>للاتصال التسلسلي، يُسمى خط الإرسال TX وخط الاستقبال RX. هناك حاجة لمحول المستوى (Level converter) لترجمة جهد المتحكم الدقيق إلى جهد RS232.<br>يعمل المتحكم بمستوى TTL (أي 0 فولت و 5 فولت)، بينما RS232 يعمل بمستوى +/-12 فولت. من أشهر المحولات رقاقة MAX232.</div>"
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Q/ What is the difference between Microprocessor and Microcontroller</b><br><br><table class='summary-table'><tr><th>Microprocessor</th><th>Microcontroller</th></tr><tr><td>CPU is stand-alone. RAM, ROM, I/O, timer are separate.</td><td>CPU, RAM, ROM, I/O and timer are all on a single chip.</td></tr><tr><td>Designer can decide on the amount of ROM, RAM and I/O ports</td><td>Fixed amount of on-chip ROM, RAM, I/O ports.</td></tr><tr><td>General-purpose</td><td>Single-purpose.</td></tr><tr><td>High processing power</td><td>Low processing power</td></tr><tr><td>Typically 32/64-bit</td><td>Typically 8/16 bit</td></tr><tr><td>High power consumption</td><td>Low power consumption</td></tr></table></div>",
+        img: "",
+        options: [],
+        ans: 0,
+        note: "<div style='direction:rtl; text-align:right;'><b>س/ ما هو الفرق بين المعالج الدقيق والمتحكم الدقيق؟</b><br><br><table class='summary-table'><tr><th>المعالج الدقيق (Microprocessor)</th><th>المتحكم الدقيق (Microcontroller)</th></tr><tr><td>وحدة المعالجة المركزية (CPU) مستقلة. بينما الذاكرة والمنافذ والمؤقتات منفصلة في رقائق أخرى.</td><td>المعالج والذاكرة والمنافذ والمؤقتات كلها مدمجة في شريحة واحدة.</td></tr><tr><td>يمكن للمصمم تحديد حجم الذاكرة وعدد المنافذ.</td><td>حجم الذاكرة وعدد المنافذ ثابت ومدمج مسبقاً.</td></tr><tr><td>يستخدم لأغراض عامة.</td><td>يستخدم لغرض أو وظيفة واحدة (محددة).</td></tr><tr><td>قدرة معالجة عالية.</td><td>قدرة معالجة منخفضة.</td></tr><tr><td>غالباً 32/64 بت.</td><td>غالباً 8/16 بت.</td></tr><tr><td>استهلاك عالي للطاقة.</td><td>استهلاك منخفض للطاقة.</td></tr></table></div>"
+    }
+];
+
+var group_practical = [
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Experiment (1) - Digital Output</b><br><br><b>Question:</b> Write an Arduino program to control an LED connected to pin 13. Turn it on for 1 second, then off for 1 second continuously.<br><br><b>Code:</b><br><pre dir='ltr'>void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}</pre></div>", 
+        options: [], 
+        ans: 0, 
+        note: "<div style='direction:rtl; text-align:right;'><b>التجربة (1) - الإخراج الرقمي (Digital Output)</b><br><b>الهدف:</b> التحكم في تشغيل وإطفاء مؤشر LED باستخدام دالة <code>digitalWrite</code> والمؤقت الزمني <code>delay</code>.<br><br>تم عرض الكود الكامل لحل السؤال باللغة الإنجليزية في الأعلى.</div>" 
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Experiment (2) - Digital Input</b><br><br><b>Question:</b> Write an Arduino program to read the state of a pushbutton connected to pin 2. If the button is pressed (LOW), turn off the LED on pin 7. Otherwise, turn it on and wait 1 second.<br><br><b>Code:</b><br><pre dir='ltr'>int x;\n\nvoid setup() {\n  pinMode(7, OUTPUT);\n  pinMode(2, INPUT);\n}\n\nvoid loop() {\n  x = digitalRead(2);\n  \n  if (x == 0) {\n    digitalWrite(7, LOW);\n  } else {\n    digitalWrite(7, HIGH);\n    delay(1000);\n  }\n}</pre></div>", 
+        options: [], 
+        ans: 0, 
+        note: "<div style='direction:rtl; text-align:right;'><b>التجربة (2) - الإدخال الرقمي (Digital Input)</b><br><b>الهدف:</b> قراءة حالة الزر باستخدام <code>digitalRead</code> والتحكم بالـ LED الموجود على الطرف 7 بناءً على تلك الحالة.<br><br>تم عرض الكود الكامل لحل السؤال باللغة الإنجليزية في الأعلى.</div>" 
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Experiment (3) - Serial Monitor</b><br><br><b>Question:</b> Write an Arduino program to initialize serial communication at 9600 baud rate and print various values (numbers, chars, strings) with a 1-second delay between each print statement.<br><br><b>Code:</b><br><pre dir='ltr'>void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  Serial.println(427);\n  delay(1000);\n  \n  Serial.println(61);\n  delay(1000);\n  \n  Serial.println(92);\n  delay(1000);\n  \n  Serial.println('a');\n  delay(1000);\n  \n  Serial.println('b');\n  delay(1000);\n  \n  Serial.println('A');\n  delay(1000);\n  \n  Serial.println('C');\n  delay(1000);\n  \n  Serial.println('g');\n  delay(1000);\n  \n  Serial.println(\"Hello\");\n  delay(1000);\n}</pre></div>", 
+        options: [], 
+        ans: 0, 
+        note: "<div style='direction:rtl; text-align:right;'><b>التجربة (3) - شاشة الإدخال/الإخراج التسلسلي (Serial Monitor)</b><br><b>الهدف:</b> تهيئة الاتصال التسلسلي باستخدام <code>Serial.begin</code> وإرسال البيانات للطباعة على الشاشة باستخدام <code>Serial.println</code>.<br><br>تم عرض الكود الكامل لحل السؤال باللغة الإنجليزية في الأعلى.</div>" 
+    },
+    { 
+        q: "<div style='direction:ltr; text-align:left;'><b>Experiment (4) - Make a Sound</b><br><br><b>Question:</b> Write an Arduino program to generate a 300 Hz sound tone on pin 8 for 1 second, then stop the sound completely.<br><br><b>Code:</b><br><pre dir='ltr'>void setup() {\n  pinMode(8, OUTPUT);\n  tone(8, 300);\n  delay(1000);\n  noTone(8);\n}\n\nvoid loop() {\n}</pre></div>", 
+        options: [], 
+        ans: 0, 
+        note: "<div style='direction:rtl; text-align:right;'><b>التجربة (4) - إصدار صوت (Make a Sound)</b><br><b>الهدف:</b> استخدام الدالة <code>tone()</code> لتوليد تردد صوتي معين (300 هرتز) والدالة <code>noTone()</code> لإيقافه.<br><br>تم عرض الكود الكامل لحل السؤال باللغة الإنجليزية في الأعلى.</div>" 
+    }
+];
+
+/* ════ DB ════ */
+let uid = 1;
+function prep(arr, gname) {
+  return arr.map(item => ({...item, uid: uid++, gname: gname}));
+}
+const db = {
+  g_review:   prep(group_review,   'المراجعة الشاملة'),
+  g_summary:  prep(group_summary,  'الشرحيات'),
+  g_practical:prep(group_practical,'العملي')
+};
+function allQ() { return [...db.g_review, ...db.g_summary, ...db.g_practical]; }
+
+/* ════ STATE ════ */
+let viewData   = [];
+let testMode   = false;
+let scoreRight = 0, scoreAnswered = 0;
+const LETTERS  = ['A','B','C','D'];
+
+/* ════ SHUFFLE ════ */
+function shuffle(a) {
+  const b = [...a];
+  for (let i = b.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i],b[j]] = [b[j],b[i]];
+  }
+  return b;
+}
+
+/* ════ NAVIGATION ════ */
+function goHome() {
+  document.getElementById('home-view').style.display = 'block';
+  document.getElementById('quiz-view').style.display = 'none';
+  document.getElementById('result-modal').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ════ START ════ */
+function startMode(mode, groupKey) {
+  const pool = db[groupKey].slice();
+
+  if (mode === 'read') {
+    testMode = false;
+    viewData = pool;
+  } else if (mode === 'quiz-full') {
+    testMode = true;
+    viewData = shuffle(pool);
+  } else if (mode === 'quiz-random') {
+    testMode = true;
+    const n = parseInt(document.getElementById('random-num').value);
+    if (!n || n < 1) { alert('الرجاء إدخال عدد صحيح.'); return; }
+    viewData = shuffle(pool).slice(0, Math.min(n, pool.length));
+  } else if (mode === 'quiz-range') {
+    testMode = true;
+    const s = parseInt(document.getElementById('range-start').value);
+    const e = parseInt(document.getElementById('range-end').value);
+    if (!s || !e || s > e) { alert('الرجاء إدخال نطاق صحيح.'); return; }
+    viewData = pool.slice(s-1, e);
+    if (!viewData.length) { alert('لا توجد أسئلة في هذا النطاق.'); return; }
+  }
+
+  scoreRight = 0; scoreAnswered = 0;
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('quiz-view').style.display  = 'block';
+  document.getElementById('btn-finish').style.display = testMode ? 'flex' : 'none';
+  document.querySelector('.score-display').style.display = testMode ? 'flex' : 'none';
+  document.getElementById('progress-track').style.display = testMode ? 'flex' : 'none';
+  updateScore();
+  renderQuestions();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ════ RENDER ════ */
+function renderQuestions() {
+  const c = document.getElementById('q-container');
+  c.innerHTML = `<div class="quiz-count-header">عرض <strong>${viewData.length}</strong> ${testMode ? 'سؤال في الاختبار' : 'عنصر'}</div>`;
+
+  viewData.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard-' + q.uid;
+    card.style.animationDelay = Math.min(idx * .04, .5) + 's';
+
+    let html = `
+      <div class="q-meta">
+        <span class="q-num"><i class="fa-solid fa-circle-dot"></i> ${idx+1}</span>
+        <span class="q-group-tag">${q.gname}</span>
+      </div>
+      <div class="q-body" id="qbody-${q.uid}" data-lang="en">${q.q}</div>
+    `;
+
+    if (q.img) {
+      html += `<div class="q-img-wrap">${q.img}</div>`;
+    }
+
+    if (q.options && q.options.length) {
+      html += `<ul class="options">`;
+      q.options.forEach((opt, oi) => {
+        if (testMode) {
+          html += `<li class="opt" onclick="answer(${q.uid},${oi},${q.ans},this)"><span class="opt-letter">${LETTERS[oi]}</span>${opt}</li>`;
+        } else {
+          const cls = oi === q.ans ? 'correct locked' : 'locked';
+          html += `<li class="opt ${cls}"><span class="opt-letter">${LETTERS[oi]}</span>${opt}</li>`;
+        }
+      });
+      html += `</ul>`;
+    }
+
+    html += `
+      <div class="q-footer">
+        <button class="translate-btn" onclick="toggleTrans(${q.uid})">
+          <i class="fa-solid fa-language"></i> ترجمة / توضيح
+        </button>
+      </div>
+    `;
+
+    card.innerHTML = html;
+    c.appendChild(card);
+  });
+}
+
+/* ════ TRANSLATE ════ */
+function toggleTrans(uid) {
+  const q = allQ().find(x => x.uid === uid);
+  const box = document.getElementById('qbody-' + uid);
+  if (box.dataset.lang === 'en') {
+    box.innerHTML = q.note;
+    box.classList.add('ar-mode');
+    box.dataset.lang = 'ar';
+  } else {
+    box.innerHTML = q.q;
+    box.classList.remove('ar-mode');
+    box.dataset.lang = 'en';
+  }
+}
+
+/* ════ ANSWER ════ */
+function answer(uid, chosen, correct, el) {
+  const card = document.getElementById('qcard-' + uid);
+  if (card.classList.contains('answered')) return;
+  card.classList.add('answered');
+
+  const opts = card.querySelectorAll('.opt');
+  scoreAnswered++;
+  if (chosen === correct) {
+    el.classList.add('correct');
+    scoreRight++;
+  } else {
+    el.classList.add('wrong');
+    opts[correct].classList.add('correct');
+  }
+  opts.forEach(o => o.classList.add('locked'));
+  updateScore();
+}
+
+/* ════ SCORE ════ */
+function updateScore() {
+  document.getElementById('sc-correct').textContent  = scoreRight;
+  document.getElementById('sc-answered').textContent = scoreAnswered;
+  const pct = viewData.length ? (scoreAnswered / viewData.length) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+/* ════ RESULT MODAL ════ */
+function showResult() {
+  if (!scoreAnswered) { alert('لم تجب على أي سؤال بعد!'); return; }
+  const total   = viewData.length;
+  const wrong   = scoreAnswered - scoreRight;
+  const pct     = Math.round((scoreRight / total) * 100);
+  const circumf = 2 * Math.PI * 52; // r=52
+
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('rs-correct').textContent = scoreRight;
+  document.getElementById('rs-wrong').textContent   = wrong;
+  document.getElementById('rs-total').textContent   = total;
+
+  const ring = document.getElementById('ring-val');
+  const offset = circumf - (circumf * pct / 100);
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = pct >= 70 ? 'var(--c-green)' : pct >= 50 ? 'var(--c-amber)' : 'var(--c-red)';
+
+  const ringPct = document.getElementById('res-pct');
+  ringPct.style.color = pct >= 70 ? 'var(--c-green)' : pct >= 50 ? 'var(--c-amber)' : 'var(--c-red)';
+
+  let emoji, title, sub;
+  if (pct >= 90)       { emoji='🏆'; title='ممتاز!';      sub='أداء رائع، استمر في التفوق!'; }
+  else if (pct >= 75)  { emoji='🎉'; title='جيد جداً!';   sub='قريب من الامتياز، واصل!'; }
+  else if (pct >= 60)  { emoji='👍'; title='مقبول';       sub='تحتاج مراجعة إضافية.'; }
+  else                 { emoji='📚'; title='تحتاج جهداً'; sub='راجع المادة مجدداً وأعد الاختبار.'; }
+
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent   = sub;
+  document.getElementById('result-modal').style.display = 'flex';
+}
+
+function hideResult() {
+  document.getElementById('result-modal').style.display = 'none';
+}
+</script>
+</body>
+</html>
